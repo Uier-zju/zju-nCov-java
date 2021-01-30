@@ -1,8 +1,7 @@
 import lombok.extern.slf4j.Slf4j;
-import model.PushUtils;
-import model.SingleTask;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import task.SingleTask;
 
 /**
  * @author st4rlight

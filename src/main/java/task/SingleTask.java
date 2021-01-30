@@ -1,4 +1,4 @@
-package model;
+package task;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.http.HttpRequest;
@@ -6,8 +6,10 @@ import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import model.*;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
+import utils.PushUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigInteger;
@@ -195,8 +197,8 @@ public class SingleTask implements Job {
 		request.form("jrdqtlqk[]", 0);
 		request.form("jrdqjcqk[]", 0);
 
+		// 提交打卡数据
 		HttpResponse response = request.execute();
-
 		PostResp postResp = JSON.parseObject(response.body(), PostResp.class);
 		if(postResp.getE() == 0) {
 			log.info("打卡成功");
