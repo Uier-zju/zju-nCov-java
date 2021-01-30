@@ -16,12 +16,12 @@ public class AutoClockIn {
 		Scheduler scheduler = schedulerFactory.getScheduler();
 		// 2、创建JobDetail实例，并与PrintWordsJob类绑定(Job执行内容)
 		JobDetail jobDetail = JobBuilder.newJob(SingleTask.class).build();
-		// 3、构建Trigger实例,每隔1s执行一次
+		// 3、构建Trigger实例,每隔100s执行一次
 		Trigger trigger = TriggerBuilder.newTrigger()
 							.startNow()//立即生效
 							.withSchedule(
 								SimpleScheduleBuilder.simpleSchedule()
-									.withIntervalInSeconds(100)//每隔1s执行一次
+									.withIntervalInSeconds(100)//每隔100s执行一次
 									.repeatForever()
 							)
 							.build();//一直执行

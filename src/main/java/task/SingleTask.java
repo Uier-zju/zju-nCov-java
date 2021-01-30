@@ -58,8 +58,9 @@ public class SingleTask implements Job {
 			if(nextTime.isAfter(LocalDateTime.now()))
 				return;
 		}
-
+		// 设置下一次打卡时间
 		setNextTime();
+
 		log.info("任务开始");
 
 		// 浙大统一身份登陆
@@ -70,7 +71,7 @@ public class SingleTask implements Job {
 		}
 
 		// 获取个人信息
-		NovInfo info = getInfo();
+		NovInfo info = getAndSetInfo();
 		if(Objects.isNull(info)){
 			log.info("任务结束");
 			return;
@@ -86,6 +87,9 @@ public class SingleTask implements Job {
 		log.info("任务结束");
 	}
 
+	/**
+	 * 统一身份认证
+	 */
 	public static boolean login(String username, String password) {
 		log.info("尝试登录中, username: {}, password: {}", username, password);
 
@@ -139,13 +143,19 @@ public class SingleTask implements Job {
 		}
 	}
 
-	public static NovInfo getInfo(){
+	/**
+	 * 获取并设置打卡信息
+	 */
+	public static NovInfo getAndSetInfo(){
 		log.info("开始获取个人信息");
+
+		// 统一认证请求
 		HttpResponse response = HttpRequest.get(BASE_URL)
 				.cookie(cookies)
 				.execute();
 		cookies = response.getCookies();
 
+		// 获取定义信息和旧打卡信息
 		Matcher oldInfoMatcher = Pattern.compile(OLD_INFO_REG).matcher(response.body());
 		if(!oldInfoMatcher.find()){
 			log.error("获取个人信息失败，请至少手动打一次卡再运行此脚本");
@@ -156,25 +166,27 @@ public class SingleTask implements Job {
 			log.error("获取定义信息失败，程序退出");
 			return null;
 		}
-
 		String oldInfoStr = oldInfoMatcher.group(0).substring("oldInfo: ".length());
 		String defStr = defMatcher.group(0).substring("def = ".length());
 		NovInfo novInfo = JSON.parseObject(oldInfoStr, NovInfo.class);
 		int newId = JSONObject.parseObject(defStr, NovInfo.class).getId();
 
+		// 获取名字和学号
 		Matcher nameMatcher = Pattern.compile("realname: \"([^\\\"]+)\",").matcher(response.body());
 		nameMatcher.find();
 		Matcher numMatcher = Pattern.compile("number: '([^\\']+)',").matcher(response.body());
 		numMatcher.find();
-
 		String name = nameMatcher.group(1);
 		String numStr = numMatcher.group(1);
+
+		// 设置通用信息
 		novInfo.setId(newId);
 		novInfo.setName(name);
 		novInfo.setNumber(Integer.parseInt(numStr));
 		novInfo.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 		novInfo.setCreated(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
 
+		// 设置打卡信息
 		novInfo.setSqhzjkkys(1); // 杭州健康码颜色，1:绿色 2:红色 3:黄色
 		novInfo.setSfqrxxss(1);  // 是否确认信息属实
 		novInfo.setSfsqhzjkk(1); // 是否申领杭州健康码
@@ -187,13 +199,20 @@ public class SingleTask implements Job {
 		return novInfo;
 	}
 
+	/**
+	 * 提交打卡信息
+	 */
 	public static void postInfo(NovInfo novInfo) throws IllegalAccessException {
+		log.info("开始提交打卡信息");
+
+		// 对传进来的novInfo进行反射，获取所有属性信息，并设置到表单中
 		HttpRequest request = HttpRequest.post(SAVE_URL).cookie(cookies);
 		Field[] declaredFields = NovInfo.class.getDeclaredFields();
 		for (Field field : declaredFields) {
 			field.setAccessible(true);
 			request.form(field.getName(), field.get(novInfo));
 		}
+		// 处理特殊的表单字段
 		request.form("jrdqtlqk[]", 0);
 		request.form("jrdqjcqk[]", 0);
 
@@ -210,6 +229,10 @@ public class SingleTask implements Job {
 		}
 	}
 
+
+	/**
+	 * rsa加密
+	 */
 	public static String rsaEncrypt(String password, String eStr, String mStr){
 		byte[] bytes = password.getBytes(StandardCharsets.US_ASCII);
 		BigInteger bigPass = new BigInteger(bytes);
@@ -228,6 +251,10 @@ public class SingleTask implements Job {
 			return resultStr;
 	}
 
+
+	/**
+	 * 设置下一次打卡时间
+	 */
 	public static void setNextTime(){
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 		nextTime = LocalDateTime.of(
