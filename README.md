@@ -13,6 +13,13 @@
    <br />
    Server酱推送地址可以在这里获取：http://sc.ftqq.com/3.versionServer
 5. 运行主类`AutoClockIn.java`
+
+
+如需要部署到vps，则可以按照以下步骤运行
+1. 按【使用方法】的描述进行修改
+2. 运行`mvn package`将项目打包成jar包
+3. 将打包好的jar上传到vps
+4. 登陆到vps，通过命令`no hup java -jar xxx.jar &`后台运行，其中`xxx.jar`即是你打包的jar包名称
    
    
 仅供学习，请勿滥用，对可能产生的一切后果概不负责。
