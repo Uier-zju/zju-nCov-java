@@ -10,6 +10,7 @@
 2. fork本项目
 3. 修改`SingleTask.java`类的第44、45行的学号和密码
 4. 修改`PushUtils`类的第16行的Server酱推送地址，不修改的话，你的登陆结果会推送到我的微信上
+   <br />
    Server酱推送地址可以在这里获取：http://sc.ftqq.com/3.versionServer
    
    
