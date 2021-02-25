@@ -4,7 +4,7 @@
 修改自https://github.com/Tishacy/ZJU-nCov-Hitcarder
 
 
-使用方法
+【直接使用方法】
 
 1. 使用前一天必须手动打卡一次
 2. fork本项目
@@ -15,11 +15,12 @@
 5. 运行主类`AutoClockIn.java`
 
 
-如需要部署到vps，则可以按照以下步骤运行
+【部署vps方法】
+
 1. 按【使用方法】的描述进行修改
 2. 运行`mvn package`将项目打包成jar包
 3. 将打包好的jar上传到vps
-4. 登陆到vps，通过命令`no hup java -jar xxx.jar &`后台运行，其中`xxx.jar`即是你打包的jar包名称
+4. 登陆到vps，通过命令`nohup java -jar xxx.jar &`后台运行，其中`xxx.jar`即是你打包的jar包名称
    
    
 仅供学习，请勿滥用，对可能产生的一切后果概不负责。
