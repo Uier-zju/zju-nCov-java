@@ -12,6 +12,7 @@
 4. 修改`PushUtils`类的第16行的Server酱推送地址，不修改的话，你的登陆结果会推送到我的微信上
    <br />
    Server酱推送地址可以在这里获取：http://sc.ftqq.com/3.versionServer
+5. 运行主类`AutoClockIn.java`
    
    
 仅供学习，请勿滥用，对可能产生的一切后果概不负责。
