@@ -40,6 +40,9 @@ public class SingleTask implements Job {
 	// cookies
 	public static List<HttpCookie> cookies = new ArrayList<>();
 	public static LocalDateTime nextTime = null;
+	
+	public static final String USERNAME = ""; // 学号
+	public static final String PASSWORD = ""; // 密码
 
 
 	@Override
@@ -64,7 +67,7 @@ public class SingleTask implements Job {
 		log.info("任务开始");
 
 		// 浙大统一身份登陆
-		boolean loginSuccess = login("21951040", "K.umU6");
+		boolean loginSuccess = login(USERNAME, PASSWORD);
 		if(!loginSuccess){
 			log.info("任务结束");
 			return;
