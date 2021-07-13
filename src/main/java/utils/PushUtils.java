@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PushUtils {
 
 	// Server酱推送地址
-	public static final String SERVER_URL = "http://sc.ftqq.com/SCU79946T9aef7d94bac4283acb89b7dc26b46b055f9994cd47920.send";
+	public static final String SERVER_URL = "https://sctapi.ftqq.com/SCT53372TvU0eqAPiAonPHevj2EuElTWe.send";
 
 
 	public static void pushMsg(String title, String desc){
