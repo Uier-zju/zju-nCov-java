@@ -41,8 +41,8 @@ public class SingleTask implements Job {
 	public static List<HttpCookie> cookies = new ArrayList<>();
 	public static LocalDateTime nextTime = null;
 	
-	public static final String USERNAME = ""; // 学号
-	public static final String PASSWORD = ""; // 密码
+	public static final String USERNAME = "3180100138"; // 学号
+	public static final String PASSWORD = "rick890207"; // 密码
 
 
 	@Override
